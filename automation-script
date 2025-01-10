@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Docker image ka naam aur tag
+image_name="docker.io/adarsh730/mynode-project:latest"
+
+# Docker image pull karo
+echo "Docker image pull ho rahi hai: $image_name"
+docker pull $image_name
+
+# Image pull hone ke baad status check karo
+if [ $? -eq 0 ]; then
+    echo "Docker image successfully pull ho gayi hai!"
+else
+    echo "Kuch galat ho gaya. Docker image pull nahi ho paayi."
+    exit 1 # Script ko terminate karo agar image pull nahi hoti
+fi
+
+container_name="mishra-container"
+
+# Docker container run karo
+echo "Docker container create aur run ho raha hai: $container_name"
+docker run -d --name $container_name -p 4001:8080 $image_name
+
+# Container run hone ka status check karo
+if [ $? -eq 0 ]; then
+    echo "Docker container successfully create aur run ho gaya hai!"
+else
+    echo "Kuch galat ho gaya. Docker container create nahi ho paayi."
+    exit 1 # Script ko terminate karo agar container run nahi hota
+fi
+
+echo "Container ke health ko check kiya ja raha hai using curl..."
+sleep 5 # Thoda time do container ko initialize hone ke liye
+
+response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:4001)
+
+if [ "$response" -eq 200 ]; then
+    echo "Container sahi se run kar raha hai! HTTP response code: $response"
+    # Browser open command
+    if which xdg-open > /dev/null; then
+        xdg-open http://localhost:4001 # Linux systems
+    elif which open > /dev/null; then
+        open http://localhost:4001 # macOS systems
+    else
+        echo "Browser automatically open karne ka command nahi mila."
+    fi
+else
+    echo "Kuch galat ho gaya. HTTP response code: $response"
+fi
+

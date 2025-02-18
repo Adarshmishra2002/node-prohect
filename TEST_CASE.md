@@ -131,9 +131,9 @@ Jenkins is set to catch and show errors.
 **When**  
 The Jenkins job fails due to an error.
 
-- **Scenario 1:** Webhook trigger failure (e.g., incorrect URL, authentication issue).
-- **Scenario 2:** Container fails to start after build.
-- **Scenario 3:** Podman image build fails (e.g., missing dependencies, incorrect Dockerfile).
+- **Variation 1:** Webhook trigger failure (e.g., incorrect URL, authentication issue).
+- **Variation 2:** Container fails to start after build.
+- **Variation 3:** Podman image build fails (e.g., missing dependencies, incorrect Dockerfile).
 
 **Then**  
 Jenkins will show an appropriate error message in the logs for each case.
